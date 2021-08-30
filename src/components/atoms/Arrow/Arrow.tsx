@@ -6,13 +6,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface IArrow {
-  onClickArrow: (target: EventTarget) => void;
+  onClickArrow: (target: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   arrowDirection: string;
 }
 export const Arrow = ({ onClickArrow, arrowDirection }: IArrow) => (
   <a
     className="pagination__arrow"
-    onClick={(e) => onClickArrow(e.target)}
+    onClick={(e) => onClickArrow(e)}
     data-direction={arrowDirection}
   >
     {arrowDirection === "left" ? (

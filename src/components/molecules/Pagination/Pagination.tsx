@@ -1,20 +1,19 @@
-import * as React from "react";
 import "./index.css";
-
 import { Arrow } from "../../atoms/Arrow";
+import { getLastPage } from "../../../helpers/helpers";
 interface IPagination {
   reposPerPage: number;
   totalRepos: number;
-  paginate: (pageNumber: number, event: any) => void;
+  handlePaginate: (pageNumber: number, event: any) => void;
   indexOfFirstRepos: number;
   indexOfLastRepos: number;
   currentPage: number;
-  onClickArrow: (target: any) => void;
+  onClickArrow: (target: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
 export const Pagination = ({
   reposPerPage,
   totalRepos,
-  paginate,
+  handlePaginate,
   indexOfFirstRepos,
   indexOfLastRepos,
   currentPage,
@@ -22,7 +21,7 @@ export const Pagination = ({
 }: IPagination) => {
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(totalRepos / reposPerPage); i++) {
+  for (let i = 1; i <= getLastPage(totalRepos, reposPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -36,7 +35,7 @@ export const Pagination = ({
         {pageNumbers.map((number) => (
           <li key={number} className="pagination__item">
             <a
-              onClick={(event:any) => paginate(number, event)}
+              onClick={(event: any) => handlePaginate(number, event)}
               className={
                 currentPage === number
                   ? "pagination__link active"
