@@ -107,7 +107,6 @@ function App() {
     const field = target.closest("a").dataset.direction;
 
     const lastPage = Math.ceil(repos.length / reposPerPage);
-
     if (field === "left") {
       if (currentPage === 1) {
         return;
@@ -124,6 +123,7 @@ function App() {
     return;
   };
   console.log(currentRepos);
+  //destruct
   return (
     <div className="App">
       <Header
@@ -136,6 +136,7 @@ function App() {
       {init ? (
         repos.length ? (
           <main>
+       
             <UserCard {...data} repositories={currentRepos} loading={loading} />
 
             <Pagination
