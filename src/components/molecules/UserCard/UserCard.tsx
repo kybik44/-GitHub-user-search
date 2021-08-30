@@ -8,38 +8,26 @@ import followersImg from "../../../img/followers.svg";
 import "./index.css";
 import { IRepository } from "../../atoms/Repository/Repository";
 interface IUserCard{
-  avatar: string;
-  userName: string;
-  userNickName: string;
-  followers: string;
-  following: string;
-  userUrl: string;
-  countRepos: string;
+  data: any;
   repositories: IRepository[];
   loading: boolean
 }
 export const UserCard = ({
-  avatar,
-  userName,
-  userNickName,
-  followers,
-  following,
-  userUrl,
-  countRepos,
+  data,
   repositories,
   loading
 
 }: IUserCard) => (
   <div className="user">
     <div className="user-card">
-      <img src={avatar} alt="userPhoto" className="user-card__image" />
-      <p className="user-card__user-name">{userName}</p>
-      <a className="user-card__nickname" href={userUrl} rel="noreferrer" target="_blank">{userNickName}</a>
+      <img src={data.avatar} alt="userPhoto" className="user-card__image" />
+      <p className="user-card__user-name">{data.userName}</p>
+      <a className="user-card__nickname" href={data.userUrl} rel="noreferrer" target="_blank">{data.userNickName}</a>
       <div className="user-card__user-information">
-        <FollowInformation follow={followers} followImg={followersImg} />
-        <FollowInformation follow={following} followImg={followingImg} />
+        <FollowInformation follow={data.followers} followImg={followersImg} />
+        <FollowInformation follow={data.following} followImg={followingImg} />
       </div>
     </div>
-    {repositories.length ? (<RepositoryList repositories={repositories} loading={loading} countRepos={countRepos} />) : (<StatePage img={listIsEmpty} title="Repository list is empty" itsReposList={true}/>)}
+    {repositories.length ? (<RepositoryList repositories={repositories} loading={loading} countRepos={data.countRepos} />) : (<StatePage img={listIsEmpty} title="Repository list is empty" itsReposList={true}/>)}
   </div>
 );

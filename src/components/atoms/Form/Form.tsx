@@ -9,7 +9,7 @@ export interface IForm {
   onSubmit: (e: FormEvent) => Promise<void>;
 }
 export const Form = ({ img, userInput, onSearch, onSubmit }: IForm) => (
-  <form className="search-form" onClick={onSubmit} method="GET">
+  <form className="search-form" onSubmit={onSubmit} method="GET">
     <button className="search-form__button">
       <img className="search-form__img" src={img} alt="Search" />
     </button>

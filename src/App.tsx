@@ -10,54 +10,16 @@ import { UserCard } from "./components/molecules/UserCard";
 import { Pagination } from "./components/molecules/Pagination";
 
 function App() {
-  const [userName, setUserName] = useState("");
-  const [userNickName, setNickUserName] = useState("");
-  const [followers, setFollowers] = useState("");
-  const [following, setFollowing] = useState("");
   const [repos, setRepos] = useState([]);
-  const [countRepos, setCountRepos] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [userInput, setUserInput] = useState("");
-  const [userUrl, setUserUrl] = useState("");
+  const [userInput, setUserInput] = useState("");;
   const [error, setError] = useState(null);
   const [init, setInit] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const axios = require("axios");
-  useEffect(() => {
-    Promise.all([getUserRepositories(), getUserInfo()]).then(
-      (results) => {
-        setLoading(true);
-        const repositories = results[0].data;
-        setRepos(repositories);
-        const data = results[1].data;
-        setDataFields(data)
-        setData(data);
-        setLoading(false);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
-  }, [data]);
 
-  const setDataFields = ({
-    name,
-    login,
-    followers,
-    following,
-    public_repos,
-    avatar_url,
-    html_url
-  }: any) => {
-    setUserName(name);
-    setNickUserName(login);
-    setFollowers(followers);
-    setFollowing(following);
-    setCountRepos(public_repos);
-    setAvatar(avatar_url);
-    setUserUrl(html_url);
-  };
+
+
   function getUserRepositories() {
     return axios.get(`https://api.github.com/users/${userInput}/repos`);
   }
@@ -75,11 +37,14 @@ function App() {
     e.preventDefault();
     Promise.all([getUserRepositories(), getUserInfo()]).then(
       (results) => {
+        setLoading(true);
         const repositories = results[0].data;
         setRepos(repositories);
         const data = results[1].data;
         setData(data);
-        setInit(true);
+        setLoading(false);
+        console.log(data)
+        console.log(repositories)
       },
       (error) => {
         setError(error);
@@ -87,9 +52,8 @@ function App() {
     );
   };
 
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [reposPerPage] = useState(4);
+  const reposPerPage = 4;
   // Get current Repos
   const indexOfLastRepos = currentPage * reposPerPage;
   const indexOfFirstRepos = indexOfLastRepos - reposPerPage;
@@ -135,13 +99,7 @@ console.log(error)
         error ? (
           <main>
             <UserCard
-              avatar={avatar}
-              userName={userName}
-              userNickName={userNickName}
-              followers={followers}
-              following={following}
-              countRepos={countRepos}
-              userUrl = {userUrl}
+              data  = {data}
               repositories={currentRepos} loading={loading}
             />
 {repos.length ? (<Pagination
