@@ -14,8 +14,6 @@
 }
 
 .repositories__row-title {
-    font-family: Inter;
-    font-style: normal;
     font-weight: 500;
     font-size: 24px;
     line-height: 29px;
@@ -24,9 +22,6 @@
 }
 
 .repositories__row-text {
-    font-family: Inter;
-    font-style: normal;
-    font-weight: normal;
     font-size: 16px;
     line-height: 19px;
     color: #000000;

@@ -10,9 +10,6 @@
 }
 
 .pagination__info {
-    font-family: Inter;
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
     line-height: 21px;
     display: flex;
@@ -29,7 +26,6 @@
 }
 
 .pagination__item {
-    font-family: Inter;
     font-size: 14px;
     line-height: 21px;
     margin-right: 8px;
@@ -48,6 +44,5 @@
 
 .active {
     background: #0064EB;
-
     color: #fff;
 }

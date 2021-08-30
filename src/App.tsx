@@ -3,7 +3,6 @@ import logo from "./img/logo.svg";
 import search from "./img/search.svg";
 import initialStateImage from "./img/big-search.svg";
 import notfound from "./img/notfound.svg";
-
 import "./App.css";
 import { StatePage } from "./components/atoms/StatePage";
 import { Header } from "./components/molecules/Header";
@@ -19,7 +18,6 @@ function App() {
   const [countRepos, setCountRepos] = useState("");
   const [avatar, setAvatar] = useState("");
   const [userInput, setUserInput] = useState("");
-  const [reposUrl, setReposUrl] = useState("");
   const [userUrl, setUserUrl] = useState("");
   const [error, setError] = useState(null);
   const [init, setInit] = useState(false);
@@ -33,7 +31,7 @@ function App() {
         const repositories = results[0].data;
         setRepos(repositories);
         const data = results[1].data;
-        // setDataFields(data)
+        setDataFields(data)
         setData(data);
         setLoading(false);
       },
@@ -42,26 +40,24 @@ function App() {
       }
     );
   }, [data]);
-  // const setReposFields = ({html_url}:any) => {
-  //   setReposUrl(html_url);
-  // };
-  // const setDataFields = ({
-  //   name,
-  //   login,
-  //   followers,
-  //   following,
-  //   public_repos,
-  //   avatar_url,
-  //   html_url
-  // }: any) => {
-  //   setUserName(name);
-  //   setNickUserName(login);
-  //   setFollowers(followers);
-  //   setFollowing(following);
-  //   setCountRepos(public_repos);
-  //   setAvatar(avatar_url);
-  //   setUserUrl(html_url);
-  // };
+
+  const setDataFields = ({
+    name,
+    login,
+    followers,
+    following,
+    public_repos,
+    avatar_url,
+    html_url
+  }: any) => {
+    setUserName(name);
+    setNickUserName(login);
+    setFollowers(followers);
+    setFollowing(following);
+    setCountRepos(public_repos);
+    setAvatar(avatar_url);
+    setUserUrl(html_url);
+  };
   function getUserRepositories() {
     return axios.get(`https://api.github.com/users/${userInput}/repos`);
   }
@@ -71,11 +67,11 @@ function App() {
   const handleSearch = (e: FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLTextAreaElement;
     setUserInput(target.value);
-    if (!userInput.length) {
-      setInit(false);
+    if(!userInput.length){
+      setInit(false)
     }
   };
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     Promise.all([getUserRepositories(), getUserInfo()]).then(
       (results) => {
@@ -91,39 +87,41 @@ function App() {
     );
   };
 
+
   const [currentPage, setCurrentPage] = useState(1);
   const [reposPerPage] = useState(4);
   // Get current Repos
   const indexOfLastRepos = currentPage * reposPerPage;
   const indexOfFirstRepos = indexOfLastRepos - reposPerPage;
-  const [currentRepos, setCurrentRepos] = useState([]);
-  setCurrentRepos(repos.slice(indexOfFirstRepos, indexOfLastRepos));
+  
+  const currentRepos = repos.slice(indexOfFirstRepos, indexOfLastRepos);
   // Change page
-  const paginate = (pageNumber: number, event: MouseEvent) => {
+  const paginate = (pageNumber:number, event:any) => {
     event.preventDefault();
-    setCurrentPage(pageNumber);
+    setCurrentPage(pageNumber)
   };
-  const handleArrow = (target: any) => {
-    const field = target.closest("a").dataset.direction;
 
+  const handleArrow = (target:any) => {
+    const field = target.closest("a").dataset.direction;
+    console.log(currentPage)
     const lastPage = Math.ceil(repos.length / reposPerPage);
 
-    if (field === "left") {
-      if (currentPage === 1) {
-        return;
+      if(field === "left"){
+        if(currentPage === 1){
+          return
+          }
+        setCurrentPage(currentPage - 1)
       }
-      setCurrentPage(currentPage - 1);
-    }
-    if (field === "right") {
-      if (currentPage === lastPage) {
-        return;
+      if(field === "right"){
+      if(currentPage === lastPage){
+        return
+        }
+        setCurrentPage(currentPage + 1)
       }
-      setCurrentPage(currentPage + 1);
-    }
+  return
+  }
+console.log(error)
 
-    return;
-  };
-  console.log(currentRepos);
   return (
     <div className="App">
       <Header
@@ -134,19 +132,28 @@ function App() {
         onSubmit={handleSubmit}
       />
       {init ? (
-        repos.length ? (
+        error ? (
           <main>
-            <UserCard {...data} repositories={currentRepos} loading={loading} />
-
-            <Pagination
-              reposPerPage={reposPerPage}
-              totalRepos={repos.length}
-              paginate={paginate}
-              indexOfLastRepos={indexOfLastRepos}
-              indexOfFirstRepos={indexOfFirstRepos}
-              currentPage={currentPage}
-              onClickArrow={handleArrow}
+            <UserCard
+              avatar={avatar}
+              userName={userName}
+              userNickName={userNickName}
+              followers={followers}
+              following={following}
+              countRepos={countRepos}
+              userUrl = {userUrl}
+              repositories={currentRepos} loading={loading}
             />
+{repos.length ? (<Pagination
+        reposPerPage={reposPerPage}
+        totalRepos={repos.length}
+        paginate={paginate}
+        indexOfLastRepos={indexOfLastRepos}
+        indexOfFirstRepos={indexOfFirstRepos}
+        currentPage={currentPage}
+        onClickArrow = {handleArrow}
+      />) : ("")}
+
           </main>
         ) : (
           <StatePage img={notfound} title="User not found" />
@@ -162,6 +169,4 @@ function App() {
 }
 
 export default App;
-function axios(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+
