@@ -7,6 +7,7 @@ import followingImg from "../../../img/following.svg";
 import followersImg from "../../../img/followers.svg";
 import "./index.css";
 import { IRepository } from "../../atoms/Repository/Repository";
+
 interface IData {
   login: string;
   avatar_url: string;
@@ -16,6 +17,7 @@ interface IData {
   following: string;
   public_repos: string;
 }
+
 interface IUserCard {
   data: any;
   repositories: IRepository[];

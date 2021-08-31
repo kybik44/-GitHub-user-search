@@ -14,13 +14,14 @@ import {
   getUserRepositories,
 } from "./helpers/helpers";
 
+
 function App() {
   const [repos, setRepos] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [error, setError] = useState(null);
   const [init, setInit] = useState(false);
   const [data, setData] = useState([]);
-  // const [loading, setLoading] = useState(false);
+
   const axios = require("axios");
 
   const handleSearch = (e: FormEvent<HTMLInputElement>) => {
@@ -30,6 +31,7 @@ function App() {
       setInit(false);
     }
   };
+  
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     Promise.all([
@@ -51,30 +53,28 @@ function App() {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const reposPerPage = 4;
+  const itemsPerPage = 4;
   // Get current Repos
-  const indexOfLastRepos = currentPage * reposPerPage;
-  const indexOfFirstRepos = indexOfLastRepos - reposPerPage;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const currentRepos = getCurrentReposList(
-    indexOfFirstRepos,
-    indexOfLastRepos,
+    indexOfFirstItem,
+    indexOfLastItem,
     repos
   );
   // Change page
-  const handlePaginate = (pageNumber: number, event: any) => {
-    event.preventDefault();
+  const handlePaginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleArrow = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleArrow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as any;
     const field = target.closest("a").dataset.direction;
-    const lastPage = getLastPage(repos.length, reposPerPage);
-    const newPage = getNewPage(field, currentPage, lastPage);
+    const lastPage = getLastPage(repos.length, itemsPerPage);
+    const newPage: any = getNewPage(field, currentPage, lastPage);
     setCurrentPage(newPage);
   };
-
 
   return (
     <div className="App">
@@ -91,11 +91,11 @@ function App() {
             <UserCard data={data} repositories={currentRepos} />
             {repos.length ? (
               <Pagination
-                reposPerPage={reposPerPage}
+                itemsPerPage={itemsPerPage}
                 totalRepos={repos.length}
                 handlePaginate={handlePaginate}
-                indexOfLastRepos={indexOfLastRepos}
-                indexOfFirstRepos={indexOfFirstRepos}
+                indexOfLastItem={indexOfLastItem}
+                indexOfFirstItem={indexOfFirstItem}
                 currentPage={currentPage}
                 onClickArrow={handleArrow}
               />

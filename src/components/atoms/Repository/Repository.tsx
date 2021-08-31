@@ -1,9 +1,11 @@
 import "./index.css";
+
 export interface IRepository {
   name: string;
   description: string;
   html_url: string;
 }
+
 export const Repository = ({ name, description, html_url }: IRepository) => (
   <div className="repositories__row">
     <a
