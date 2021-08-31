@@ -19,8 +19,9 @@ interface IData {
 interface IUserCard {
   data: any;
   repositories: IRepository[];
+  isFetching: boolean;
 }
-export const UserCard = ({ data, repositories }: IUserCard) => (
+export const UserCard = ({ data, repositories,isFetching }: IUserCard) => (
   <div className="user">
     <div className="user-card">
       <img src={data.avatar_url} alt="userPhoto" className="user-card__image" />
@@ -38,11 +39,13 @@ export const UserCard = ({ data, repositories }: IUserCard) => (
         <FollowInformation follow={data.following} followImg={followingImg} />
       </div>
     </div>
-    {repositories.length ? (
-      <RepositoryList
+    {repositories.length ? (!isFetching ? (<RepositoryList
         repositories={repositories}
         countRepos={data.public_repos}
-      />
+      />) : (<div className="fetching">
+
+      </div>)
+      
     ) : (
       <StatePage
         img={listIsEmpty}

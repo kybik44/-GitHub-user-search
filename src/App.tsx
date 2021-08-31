@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import logo from "./img/logo.svg";
 import search from "./img/search.svg";
 import initialStateImage from "./img/big-search.svg";
@@ -6,22 +6,39 @@ import notfound from "./img/notfound.svg";
 import "./App.css";
 import { StatePage } from "./components/atoms/StatePage";
 import { Header, UserCard, Pagination } from "./components/molecules";
-import {
-  getCurrentReposList,
-  getLastPage,
-  getNewPage,
-  getUserInfo,
-  getUserRepositories,
-} from "./helpers/helpers";
+import { createPages, getLastPage, getNewPage } from "./helpers/helpers";
+import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
+import { getRepos, getUser } from "./actions/repos";
+import { setCurrentPage } from "./reducers/reposReducer";
 
 function App() {
-  const [repos, setRepos] = useState([]);
+  const dispatch = useDispatch();
+
+  const repos = useSelector((state: RootStateOrAny) => state.repos.items);
+  const currentPage = useSelector(
+    (state: RootStateOrAny) => state.repos.currentPage
+  );
+  const perPage = useSelector((state: RootStateOrAny) => state.repos.perPage);
+  const totalCount = useSelector(
+    (state: RootStateOrAny) => state.user.totalCount
+  );
+  const user = useSelector((state: RootStateOrAny) => state.user.user);
+  const isFetching = useSelector(
+    (state: RootStateOrAny) => state.repos.isFetching
+  );
+
   const [userInput, setUserInput] = useState("");
   const [error, setError] = useState(null);
   const [init, setInit] = useState(false);
-  const [data, setData] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  const axios = require("axios");
+
+  const pagesCount = getLastPage(totalCount, perPage);
+  const pages: number[] = [];
+  createPages(pages, pagesCount, currentPage);
+
+  useEffect(() => {
+    dispatch(getRepos(userInput, currentPage, perPage));
+    dispatch(getUser(userInput));
+  }, [currentPage]);
 
   const handleSearch = (e: FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLTextAreaElement;
@@ -30,51 +47,28 @@ function App() {
       setInit(false);
     }
   };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    Promise.all([
-      getUserRepositories(axios, userInput),
-      getUserInfo(axios, userInput),
-    ]).then(
-      (results) => {
-        const repositories = results[0].data;
-        setRepos(repositories);
-        const data = results[1].data;
-        setData(data);
-        setInit(true);
-        setError(null);
-      },
-      (error) => {
-        setError(error);
-      }
-    );
+    dispatch(setCurrentPage(1));
+    dispatch(getRepos(userInput, currentPage, perPage));
+    dispatch(getUser(userInput));
+    setInit(true);
   };
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const reposPerPage = 4;
-  // Get current Repos
-  const indexOfLastRepos = currentPage * reposPerPage;
-  const indexOfFirstRepos = indexOfLastRepos - reposPerPage;
-
-  const currentRepos = getCurrentReposList(
-    indexOfFirstRepos,
-    indexOfLastRepos,
-    repos
-  );
+  
+  const indexOfLastItem = currentPage * perPage;
+  const indexOfFirstItem = indexOfLastItem - perPage;
   // Change page
-  const handlePaginate = (pageNumber: number, event: any) => {
-    event.preventDefault();
-    setCurrentPage(pageNumber);
+  const handlePaginate = (page: number) => {
+    dispatch(setCurrentPage(page));
   };
 
-  const handleArrow = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleArrow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as any;
     const field = target.closest("a").dataset.direction;
-    const lastPage = getLastPage(repos.length, reposPerPage);
-    const newPage = getNewPage(field, currentPage, lastPage);
-    setCurrentPage(newPage);
+    const newPage = getNewPage(field, currentPage, pagesCount);
+    dispatch(setCurrentPage(newPage));
   };
-
 
   return (
     <div className="App">
@@ -86,17 +80,23 @@ function App() {
         onSubmit={handleSubmit}
       />
       {init ? (
-        !error ? (
+        error ? (
+          "das"
+        ) : !error ? (
           <main>
-            <UserCard data={data} repositories={currentRepos} />
+            <UserCard
+              data={user}
+              repositories={repos}
+              isFetching={isFetching}
+            />
             {repos.length ? (
               <Pagination
-                reposPerPage={reposPerPage}
-                totalRepos={repos.length}
-                handlePaginate={handlePaginate}
-                indexOfLastRepos={indexOfLastRepos}
-                indexOfFirstRepos={indexOfFirstRepos}
                 currentPage={currentPage}
+                pages={pages}
+                handlePaginate={handlePaginate}
+                totalCount={totalCount}
+                indexOfLastItem={indexOfLastItem}
+                indexOfFirstItem={indexOfFirstItem}
                 onClickArrow={handleArrow}
               />
             ) : (

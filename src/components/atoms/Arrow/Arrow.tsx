@@ -6,11 +6,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface IArrow {
-  onClickArrow: (target: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  onClickArrow: (target: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   arrowDirection: string;
 }
-export const Arrow = ({ onClickArrow, arrowDirection }: IArrow) => (
-  <a
+export const Arrow = ({ arrowDirection, onClickArrow }: IArrow) => (
+  <button
     className="pagination__arrow"
     onClick={(e) => onClickArrow(e)}
     data-direction={arrowDirection}
@@ -20,5 +20,5 @@ export const Arrow = ({ onClickArrow, arrowDirection }: IArrow) => (
     ) : (
       <FontAwesomeIcon className="arrow" icon={faChevronRight} />
     )}
-  </a>
+  </button>
 );

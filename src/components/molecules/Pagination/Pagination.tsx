@@ -1,49 +1,46 @@
 import "./index.css";
 import { Arrow } from "../../atoms/Arrow";
-import { getLastPage } from "../../../helpers/helpers";
+
 interface IPagination {
-  reposPerPage: number;
-  totalRepos: number;
-  handlePaginate: (pageNumber: number, event: any) => void;
-  indexOfFirstRepos: number;
-  indexOfLastRepos: number;
-  currentPage: number;
-  onClickArrow: (target: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  currentPage:number;
+  pages: number[],
+  handlePaginate: (pageNumber: number) => void;
+  totalCount:number;
+  indexOfLastItem: number;
+  indexOfFirstItem: number;
+
+  onClickArrow: (target: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 export const Pagination = ({
-  reposPerPage,
-  totalRepos,
-  handlePaginate,
-  indexOfFirstRepos,
-  indexOfLastRepos,
   currentPage,
+  pages,
+  handlePaginate,
+  totalCount,
+  indexOfLastItem,
+  indexOfFirstItem,
   onClickArrow,
 }: IPagination) => {
-  const pageNumbers = [];
 
-  for (let i = 1; i <= getLastPage(totalRepos, reposPerPage); i++) {
-    pageNumbers.push(i);
-  }
 
   return (
     <nav className="pagination">
       <div className="pagination__info">
-        {indexOfFirstRepos + 1}-{indexOfLastRepos} of {totalRepos} items
+        {indexOfFirstItem + 1}-{indexOfLastItem} of {totalCount} items
       </div>
       <Arrow onClickArrow={onClickArrow} arrowDirection="left" />
       <ul className="pagination__row">
-        {pageNumbers.map((number) => (
-          <li key={number} className="pagination__item">
-            <a
-              onClick={(event: any) => handlePaginate(number, event)}
+        {pages.map((page:number, index:number) => (
+          <li key={index} className="pagination__item">
+            <button
+              onClick={() => handlePaginate(page)}
               className={
-                currentPage === number
+                currentPage === page
                   ? "pagination__link active"
                   : "pagination__link"
               }
             >
-              {number}
-            </a>
+              {page}
+            </button>
           </li>
         ))}
       </ul>
