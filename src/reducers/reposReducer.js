@@ -2,8 +2,10 @@ const SET_REPOS = "SET_REPOS";
 const SET_IS_FETCHING = "SET_IS_FETCHING";
 const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const SET_FETCH_ERROR = "SET_FETCH_ERROR";
+const SET_INITIAL_STATE = "SET_INITIAL_STATE";
 
 const defaultState = {
+    initialState: true,
     items: [],
     user: {},
     isFetching: true,
@@ -37,6 +39,11 @@ export default function reposReducer(state = defaultState, action) {
                             ...state,
                             isFetchError: action.payload
                         }
+                    case SET_INITIAL_STATE:
+                        return {
+                            ...state,
+                            initialState: action.payload
+                        }
 
                         default:
                             return state
@@ -61,5 +68,9 @@ export const setCurrentPage = (page) => ({
 
 export const setFetchError = (bool) => ({
     type: SET_FETCH_ERROR,
+    payload: bool
+})
+export const setInitialState = (bool) => ({
+    type: SET_INITIAL_STATE,
     payload: bool
 })

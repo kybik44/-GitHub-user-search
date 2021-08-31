@@ -9,11 +9,12 @@ import { Header, UserCard, Pagination } from "./components/molecules";
 import { createPages, getLastPage, getNewPage } from "./helpers/helpers";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { getRepos, getUser } from "./actions/repos";
-import { setCurrentPage } from "./reducers/reposReducer";
+import { setCurrentPage, setInitialState } from "./reducers/reposReducer";
 
 function App() {
   const dispatch = useDispatch();
 
+  const initialState = useSelector((state: RootStateOrAny) => state.repos.initialState);
   const repos = useSelector((state: RootStateOrAny) => state.repos.items);
   const currentPage = useSelector(
     (state: RootStateOrAny) => state.repos.currentPage
@@ -31,7 +32,6 @@ function App() {
   );
   
   const [userInput, setUserInput] = useState("");
-  const [init, setInit] = useState(false);
 
   const pagesCount = getLastPage(totalCount, perPage);
   const pages: number[] = [];
@@ -46,7 +46,7 @@ function App() {
     const target = e.target as HTMLTextAreaElement;
     setUserInput(target.value);
     if (!userInput.length) {
-      setInit(false);
+      dispatch(setInitialState(true))
     }
   };
 
@@ -55,12 +55,12 @@ function App() {
     dispatch(setCurrentPage(1));
     dispatch(getRepos(userInput, currentPage, perPage));
     dispatch(getUser(userInput));
-    setInit(true);
+    dispatch(setInitialState(false))
   };
   
   const indexOfLastItem = currentPage * perPage;
   const indexOfFirstItem = indexOfLastItem - perPage;
-  
+
   // Change page
   const handlePaginate = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -82,7 +82,7 @@ function App() {
         onSearch={handleSearch}
         onSubmit={handleSubmit}
       />
-      {init ? (!isFetchError ? (<main>
+      {!initialState ? (!isFetchError ? (<main>
             <UserCard
               data={user}
               repositories={repos}

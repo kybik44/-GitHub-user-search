@@ -2,7 +2,8 @@ import axios from "axios";
 import {
     setRepos,
     setIsFetching,
-    setFetchError
+    setFetchError,
+    setInitialState
 } from "../reducers/reposReducer";
 import {
     setUser
@@ -11,6 +12,7 @@ import {
 export const getRepos = (userInput, currentPage, perPage) => {
     return async (dispatch) => {
         try {
+            dispatch(setInitialState(true))
             dispatch(setIsFetching(true))
             dispatch(setFetchError(false))
             const repositories = await axios.get(`https://api.github.com/users/${userInput}/repos?per_page=${perPage}&page=${currentPage}`);
@@ -26,6 +28,7 @@ export const getRepos = (userInput, currentPage, perPage) => {
 export const getUser = (userInput) => {
     return async (dispatch) => {
         try {
+            dispatch(setInitialState(true))
             dispatch(setIsFetching(true))
             dispatch(setFetchError(false))
             const userInfo = await axios.get(`https://api.github.com/users/${userInput}`);
