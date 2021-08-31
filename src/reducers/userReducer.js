@@ -17,10 +17,14 @@ export function userReducer(state = defaultState, action) {
             return {
                 ...state,
                 user: action.payload,
-                totalCount: action.payload.public_repos,
+                    totalCount: action.payload.public_repos,
             }
-        default:
-            return state
+            default:
+                return state
     }
 };
-export const setUser = (user) => ({type: SET_USER, payload: user})
+
+export const setUser = (user) => ({
+    type: SET_USER,
+    payload: user
+})

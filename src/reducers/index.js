@@ -9,7 +9,9 @@ import {
     composeWithDevTools
 } from 'redux-devtools-extension';
 import reposReducer from "./reposReducer";
-import { userReducer } from "./userReducer";
+import {
+    userReducer
+} from "./userReducer";
 import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
@@ -17,4 +19,5 @@ const rootReducer = combineReducers({
     user: userReducer
 
 })
+
 export const store = createStore(rootReducer, applyMiddleware(thunk))

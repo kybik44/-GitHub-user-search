@@ -26,9 +26,11 @@ function App() {
   const isFetching = useSelector(
     (state: RootStateOrAny) => state.repos.isFetching
   );
-
+  const isFetchError = useSelector(
+    (state: RootStateOrAny) => state.repos.isFetchError
+  );
+  
   const [userInput, setUserInput] = useState("");
-  const [error, setError] = useState(null);
   const [init, setInit] = useState(false);
 
   const pagesCount = getLastPage(totalCount, perPage);
@@ -58,6 +60,7 @@ function App() {
   
   const indexOfLastItem = currentPage * perPage;
   const indexOfFirstItem = indexOfLastItem - perPage;
+  
   // Change page
   const handlePaginate = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -65,7 +68,7 @@ function App() {
 
   const handleArrow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as any;
-    const field = target.closest("a").dataset.direction;
+    const field = target.closest("button").dataset.direction;
     const newPage = getNewPage(field, currentPage, pagesCount);
     dispatch(setCurrentPage(newPage));
   };
@@ -79,11 +82,7 @@ function App() {
         onSearch={handleSearch}
         onSubmit={handleSubmit}
       />
-      {init ? (
-        error ? (
-          "das"
-        ) : !error ? (
-          <main>
+      {init ? (!isFetchError ? (<main>
             <UserCard
               data={user}
               repositories={repos}
@@ -98,15 +97,9 @@ function App() {
                 indexOfLastItem={indexOfLastItem}
                 indexOfFirstItem={indexOfFirstItem}
                 onClickArrow={handleArrow}
-              />
-            ) : (
-              ""
-            )}
-          </main>
-        ) : (
-          <StatePage img={notfound} title="User not found" />
-        )
-      ) : (
+              />) : ("")}
+          </main>) : ( <StatePage img={notfound} title="User not found" /> ) 
+        ) : ( 
         <StatePage
           img={initialStateImage}
           title="Start with searching a GitHub user"

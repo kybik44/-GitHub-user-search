@@ -1,5 +1,3 @@
-import { IRepository } from "../components/atoms/Repository/Repository";
-
 export const getLastPage = (reposLength:number, reposPerPage:number) => {
     return Math.ceil(reposLength / reposPerPage);
 };
