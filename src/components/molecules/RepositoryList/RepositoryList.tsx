@@ -16,8 +16,8 @@ export const RepositoryList = ({
     <div className="repositories">
       <h2 className="repositories__title">Repositories ({countRepos})</h2>
       <div className="repositories__content">
-        {repositories.map((repos: IRepository) => (
-          <Repository {...repos} />
+        {repositories.map((repos: IRepository, index) => (
+          <Repository key={index} {...repos} />
         ))}
       </div>
     </div>
