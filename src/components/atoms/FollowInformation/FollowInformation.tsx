@@ -1,9 +1,11 @@
 import * as React from "react";
 import "./index.css";
+
 interface IFollowInformation {
   followImg: string;
   follow: string;
 }
+
 export const FollowInformation = ({
   followImg,
   follow,

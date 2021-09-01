@@ -20,6 +20,10 @@
     color: #0064EB;
     margin-bottom: 16px;
 }
+.repositories__row-title:hover {
+    color: #0c4b9e;
+    cursor: pointer;
+}
 
 .repositories__row-text {
     font-size: 16px;

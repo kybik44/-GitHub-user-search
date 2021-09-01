@@ -5,10 +5,14 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 interface IArrow {
-  onClickArrow: (target: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClickArrow: (
+    target: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
   arrowDirection: string;
 }
+
 export const Arrow = ({ arrowDirection, onClickArrow }: IArrow) => (
   <button
     className="pagination__arrow"

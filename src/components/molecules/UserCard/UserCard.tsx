@@ -7,7 +7,9 @@ import followingImg from "../../../img/following.svg";
 import followersImg from "../../../img/followers.svg";
 import "./index.css";
 import { IRepository } from "../../atoms/Repository/Repository";
-interface IData {
+import { Loading } from "../../atoms/Loading/Loading";
+
+export interface IUserInfo {
   login: string;
   avatar_url: string;
   name: string;
@@ -16,36 +18,49 @@ interface IData {
   following: string;
   public_repos: string;
 }
+
 interface IUserCard {
-  data: any;
+  userInfo: IUserInfo;
   repositories: IRepository[];
-  isFetching: boolean;
+  isFetchingRepos: boolean;
 }
-export const UserCard = ({ data, repositories,isFetching }: IUserCard) => (
+export const UserCard = ({ userInfo, repositories, isFetchingRepos }: IUserCard) => (
   <div className="user">
     <div className="user-card">
-      <img src={data.avatar_url} alt="userPhoto" className="user-card__image" />
-      <p className="user-card__user-name">{data.name}</p>
+      <img
+        src={userInfo.avatar_url}
+        alt="userPhoto"
+        className="user-card__image"
+      />
+      <p className="user-card__user-name">{userInfo.name}</p>
       <a
         className="user-card__nickname"
-        href={data.html_url}
+        href={userInfo.html_url}
         rel="noreferrer"
         target="_blank"
       >
-        {data.login}
+        {userInfo.login}
       </a>
       <div className="user-card__user-information">
-        <FollowInformation follow={data.followers} followImg={followersImg} />
-        <FollowInformation follow={data.following} followImg={followingImg} />
+        <FollowInformation
+          follow={userInfo.followers}
+          followImg={followersImg}
+        />
+        <FollowInformation
+          follow={userInfo.following}
+          followImg={followingImg}
+        />
       </div>
     </div>
-    {repositories.length ? (!isFetching ? (<RepositoryList
-        repositories={repositories}
-        countRepos={data.public_repos}
-      />) : (<div className="fetching">
-
-      </div>)
-      
+    {repositories.length ? (
+      !isFetchingRepos ? (
+        <RepositoryList
+          repositories={repositories}
+          countRepos={userInfo.public_repos}
+        />
+      ) : (
+        <Loading />
+      )
     ) : (
       <StatePage
         img={listIsEmpty}

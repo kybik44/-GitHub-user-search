@@ -2,15 +2,17 @@ import "./index.css";
 import { Arrow } from "../../atoms/Arrow";
 
 interface IPagination {
-  currentPage:number;
-  pages: number[],
+  currentPage: number;
+  pages: number[];
   handlePaginate: (pageNumber: number) => void;
-  totalCount:number;
+  totalCount: number;
   indexOfLastItem: number;
   indexOfFirstItem: number;
-
-  onClickArrow: (target: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClickArrow: (
+    target: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 }
+
 export const Pagination = ({
   currentPage,
   pages,
@@ -20,8 +22,6 @@ export const Pagination = ({
   indexOfFirstItem,
   onClickArrow,
 }: IPagination) => {
-
-
   return (
     <nav className="pagination">
       <div className="pagination__info">
@@ -29,7 +29,7 @@ export const Pagination = ({
       </div>
       <Arrow onClickArrow={onClickArrow} arrowDirection="left" />
       <ul className="pagination__row">
-        {pages.map((page:number, index:number) => (
+        {pages.map((page: number, index: number) => (
           <li key={index} className="pagination__item">
             <button
               onClick={() => handlePaginate(page)}

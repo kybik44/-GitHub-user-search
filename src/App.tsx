@@ -10,8 +10,11 @@ import { createPages, getLastPage, getNewPage } from "./helpers/helpers";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { getRepos, getUser } from "./actions/repos";
 import { setCurrentPage, setInitialState } from "./reducers/reposReducer";
+import { Loading } from "./components/atoms/Loading/Loading";
+
 
 function App() {
+
   const dispatch = useDispatch();
 
   const initialState = useSelector((state: RootStateOrAny) => state.repos.initialState);
@@ -24,8 +27,11 @@ function App() {
     (state: RootStateOrAny) => state.user.totalCount
   );
   const user = useSelector((state: RootStateOrAny) => state.user.user);
-  const isFetching = useSelector(
-    (state: RootStateOrAny) => state.repos.isFetching
+  const isFetchingRepos = useSelector(
+    (state: RootStateOrAny) => state.repos.isFetchingRepos
+  );
+  const isFetchingUser = useSelector(
+    (state: RootStateOrAny) => state.user.isFetchingUser
   );
   const isFetchError = useSelector(
     (state: RootStateOrAny) => state.repos.isFetchError
@@ -38,14 +44,16 @@ function App() {
   createPages(pages, pagesCount, currentPage);
 
   useEffect(() => {
-    dispatch(getRepos(userInput, currentPage, perPage));
-    dispatch(getUser(userInput));
+    if(!initialState){
+      dispatch(getRepos(userInput, currentPage, perPage));
+      // dispatch(getUser(userInput));
+    }
   }, [currentPage]);
 
   const handleSearch = (e: FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLTextAreaElement;
     setUserInput(target.value);
-    if (!userInput.length) {
+    if (!userInput) {
       dispatch(setInitialState(true))
     }
   };
@@ -55,7 +63,6 @@ function App() {
     dispatch(setCurrentPage(1));
     dispatch(getRepos(userInput, currentPage, perPage));
     dispatch(getUser(userInput));
-    dispatch(setInitialState(false))
   };
   
   const indexOfLastItem = currentPage * perPage;
@@ -82,11 +89,11 @@ function App() {
         onSearch={handleSearch}
         onSubmit={handleSubmit}
       />
-      {!initialState ? (!isFetchError ? (<main>
+      {!initialState ? (!isFetchError ? (!isFetchingUser ? (<main>
             <UserCard
-              data={user}
+              userInfo={user}
               repositories={repos}
-              isFetching={isFetching}
+              isFetchingRepos={isFetchingRepos}
             />
             {repos.length ? (
               <Pagination
@@ -98,7 +105,7 @@ function App() {
                 indexOfFirstItem={indexOfFirstItem}
                 onClickArrow={handleArrow}
               />) : ("")}
-          </main>) : ( <StatePage img={notfound} title="User not found" /> ) 
+          </main>):(<Loading />)) : ( <StatePage img={notfound} title="User not found" /> ) 
         ) : ( 
         <StatePage
           img={initialStateImage}

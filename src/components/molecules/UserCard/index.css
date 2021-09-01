@@ -26,13 +26,15 @@
     margin-bottom: 12px;
 }
 
-.user-card__nickname {
-  
+.user-card__nickname {  
     font-size: 18px;
     line-height: 22px;
-
     color: #0064EB;
     margin-bottom: 32px;
+}
+.user-card__nickname:hover {  
+    color: #0c4b9e;
+    cursor: pointer;
 }
 
 .user-card__user-information {
