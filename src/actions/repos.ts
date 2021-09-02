@@ -23,7 +23,6 @@ export const getRepos = (userInput:string, currentPage:number, perPage:number) =
             dispatch(setFetchError(true))
             dispatch(setIsFetchingRepos(false))
         }
-
     }
 
 }
