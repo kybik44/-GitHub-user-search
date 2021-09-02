@@ -70,7 +70,7 @@ function App() {
 
   const handleArrow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = e.target as any;
-    const field = target.closest("a").dataset.direction;
+    const field = target.closest("button").dataset.direction;
     const lastPage = getLastPage(repos.length, itemsPerPage);
     const newPage: any = getNewPage(field, currentPage, lastPage);
     setCurrentPage(newPage);
