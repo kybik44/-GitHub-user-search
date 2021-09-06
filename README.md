@@ -1,4 +1,4 @@
-React github user finder app (React + Redux, GitHub API, TypeScript)
+**React github user finder app (React + Redux, GitHub API, TypeScript)**
 
 # Getting Started with Create React App
 
