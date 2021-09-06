@@ -1,5 +1,7 @@
 # React github user finder app (React + Redux, GitHub API, TypeScript)
 
+![react-app](https://user-images.githubusercontent.com/65903462/132226292-15411cd1-2379-4ff3-b592-ba7704e2f384.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
